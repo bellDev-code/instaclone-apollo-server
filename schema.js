@@ -7,9 +7,7 @@ __dirname 은 현재 실행 중인 폴더 경로
 */
 
 const loadedTypes = loadFilesSync(`${__dirname}/**/*.typeDefs.js`);
-const loadedResolvers = loadFilesSync(
-  `${__dirname}/**/*.{queries,mutations}.js`
-);
+const loadedResolvers = loadFilesSync(`${__dirname}/**/*.resolvers.js`);
 
 export const typeDefs = mergeTypeDefs(loadedTypes);
 export const resolvers = mergeResolvers(loadedResolvers);
