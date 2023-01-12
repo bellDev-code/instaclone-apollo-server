@@ -19,7 +19,7 @@ export const getUser = async (token) => {
   }
 };
 
-// 1. Protecting Resolver
+// 1. Protecting Resolver : resolver의 context에서 부르는 방법
 // export const protectResolver = (user) => {
 //   if (!user) {
 //     throw new Error("로그인이 필요합니다.");
@@ -27,12 +27,25 @@ export const getUser = async (token) => {
 // };
 
 // 2. Protecting Resolver : function-oriented Programming
-export const protectResolver = (ourResolver) => (root, args, context, info) => {
-  if (!context.loggedInUser) {
-    return {
-      ok: false,
-      error: "이 작업을 수행하려면 로그인 해주세요.",
-    };
-  }
-  return ourResolver(root, args, context, info);
+// export const protectResolver = (ourResolver) => (root, args, context, info) => {
+//   if (!context.loggedInUser) {
+//     return {
+//       ok: false,
+//       error: "이 작업을 수행하려면 로그인 해주세요.",
+//     };
+//   }
+//   return ourResolver(root, args, context, info);
+// };
+
+// 3. Recap
+export const protectedResolver = (ourResolver) => {
+  return function (root, args, context, info) {
+    if (!context.loggedInUser) {
+      return {
+        ok: false,
+        error: "이 작업을 수행하려면 로그인 해주세요.",
+      };
+    }
+    return ourResolver(root, args, context, info);
+  };
 };
