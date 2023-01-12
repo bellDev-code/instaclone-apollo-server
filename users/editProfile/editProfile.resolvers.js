@@ -1,14 +1,15 @@
 import client from "../../client";
 import bcrypt from "bcrypt";
+import { protectResolver } from "../users.utils";
 
 export default {
   Mutation: {
     editProfile: async (
       _,
       { firstName, lastName, username, email, password: newPassword },
-      { loggedInUser }
+      { loggedInUser, protectResolver }
     ) => {
-      console.log(loggedInUser);
+      protectResolver(loggedInUser);
       // 1. prisma에 undefiend를 보내면 DB에 그 값들을 보내지 않는다.
       // 2. password hash : field에 별칭 선언 hashing 해준다.
       let uglyPassword = null;

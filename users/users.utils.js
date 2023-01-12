@@ -18,3 +18,9 @@ export const getUser = async (token) => {
     return null;
   }
 };
+
+export const protectResolver = (user) => {
+  if (!user) {
+    throw new Error("로그인이 필요합니다.");
+  }
+};
