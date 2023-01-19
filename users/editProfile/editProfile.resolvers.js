@@ -4,7 +4,7 @@ import { protectedResolver } from "../users.utils";
 
 const resolverFn = async (
   _,
-  { firstName, lastName, username, email, password: newPassword },
+  { firstName, lastName, username, email, password: newPassword, bio },
   { loggedInUser }
 ) => {
   // 1. prisma에 undefiend를 보내면 DB에 그 값들을 보내지 않는다.
@@ -23,6 +23,7 @@ const resolverFn = async (
       lastName,
       username,
       email,
+      bio,
       // ES6 문법 : uglyPassword가 ture면 {}를 return
       ...(uglyPassword && { password: uglyPassword }),
     },
