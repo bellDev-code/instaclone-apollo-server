@@ -8,19 +8,25 @@ const resolverFn = async (
   { firstName, lastName, username, email, password: newPassword, bio, avatar },
   { loggedInUser }
 ) => {
-  // 추후 aws 연결 시 사용하지 않는 코드 : node.js에서 파일 저장이 쉬운걸 보여주기 위해 사용
-  const { filename, createReadStream } = await avatar;
-  const readStream = createReadStream();
-  const writeStream = createWriteStream(process.cwd() + "/uploads/" + filename);
-  readStream.pipe(writeStream);
-
-  // 1. prisma에 undefiend를 보내면 DB에 그 값들을 보내지 않는다.
-  // 2. password hash : field에 별칭 선언 hashing 해준다.
   let uglyPassword = null;
 
   if (newPassword) {
     uglyPassword = await bcrypt.hash(newPassword, 10);
   }
+
+  let avatarUrl = null;
+
+  if (avatar) {
+    const { filename, createReadStream } = await avatar;
+    const newFilename = `${loggedInUser.id}-${Date.now()}-${filename}`;
+    const readStream = createReadStream();
+    const writeStream = createWriteStream(
+      process.cwd() + "/uploads/" + newFilename
+    );
+    readStream.pipe(writeStream);
+    avatarUrl = `http://localhost/4000/static/${newFilename}`;
+  }
+
   const updateUser = await client.user.update({
     where: {
       id: loggedInUser.id,
@@ -31,9 +37,8 @@ const resolverFn = async (
       username,
       email,
       bio,
-      avatar,
-      // ES6 문법 : uglyPassword가 ture면 {}를 return
       ...(uglyPassword && { password: uglyPassword }),
+      ...(avatarUrl && { avatar: avatarUrl }),
     },
   });
   if (updateUser) {
