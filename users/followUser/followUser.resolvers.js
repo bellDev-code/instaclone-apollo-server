@@ -11,7 +11,7 @@ export default {
       if (!ok) {
         return {
           ok: false,
-          error: "해당 username은 존재하지 않습니다.",
+          error: "해당 username은 존재하지 않아 팔로우를 할 수 없습니다.",
         };
       }
       await client.user.update({
