@@ -3,6 +3,7 @@ import { typeDefs, resolvers } from "./schema";
 import { getUser } from "./users/users.utils";
 require("dotenv").config();
 
+// 지금 setup의 한계 url을 변경할 수 없다.
 const server = new ApolloServer({
   typeDefs,
   resolvers,
