@@ -3,14 +3,16 @@ import client from "../../client";
 export default {
   Query: {
     seeFollowers: async (_, { username, page }) => {
-      const aFollowers = await client.user
+      const followers = await client.user
         .findUnique({
           where: { username },
         })
-        .followers();
-      console.log(aFollowers[0]);
+        .followers({
+          take: 5,
+          skip: (page - 1) * 5,
+        });
 
-      const bFolloweres = await client.user.findMany({
+      const totalFollowers = await client.user.count({
         where: {
           following: {
             some: {
@@ -19,7 +21,11 @@ export default {
           },
         },
       });
-      console.log(bFolloweres[0]);
+      return {
+        ok: true,
+        followers,
+        totalPages: Math.ceil(totalFollowers / 5),
+      };
     },
   },
 };
