@@ -22,5 +22,12 @@ export default {
           },
         },
       }),
+    isMe: ({ id }, _, { loggedInUser }) => {
+      if (!loggedInUser) {
+        return false;
+      } else {
+        return id === loggedInUser.id;
+      }
+    },
   },
 };
