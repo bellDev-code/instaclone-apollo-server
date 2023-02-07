@@ -19,7 +19,7 @@ export default {
       }),
   },
   Hashtag: {
-    photos: ({ id }) => {
+    photos: ({ id }, { page }) => {
       return client.hashtag
         .findUnique({
           where: {
