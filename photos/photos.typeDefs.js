@@ -18,4 +18,10 @@ export default gql`
     createdAt: String!
     updatedAt: String!
   }
+  type Photo {
+    id: Int!
+    photo: Photo!
+    createdAt: String!
+    updatedAt: String!
+  }
 `;
