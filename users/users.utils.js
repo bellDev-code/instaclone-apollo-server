@@ -41,10 +41,15 @@ export const getUser = async (token) => {
 export const protectedResolver = (ourResolver) => {
   return function (root, args, context, info) {
     if (!context.loggedInUser) {
-      return {
-        ok: false,
-        error: "이 작업을 수행하려면 로그인 해주세요.",
-      };
+      const query = info.operation.operation === "query";
+      if (query) {
+        return null;
+      } else {
+        return {
+          ok: false,
+          error: "이 작업을 수행하려면 로그인 해주세요.",
+        };
+      }
     }
     return ourResolver(root, args, context, info);
   };
