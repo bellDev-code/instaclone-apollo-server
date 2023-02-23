@@ -13,9 +13,9 @@ export const uploadPhoto = async (file, userId) => {
   const objectName = `${userId}-${Date.now()}-${filename}`;
   const { Location } = await new AWS.S3()
     .upload({
-      Bucket: "instaclone-uploads",
+      Bucket: "instaclone-pratice-lee",
       Key: objectName,
-      ACL: "public-read",
+      ACL: "public-read-write",
       Body: readStream,
     })
     .promise();
