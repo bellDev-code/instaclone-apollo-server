@@ -10,11 +10,11 @@ export default {
           userId: {
             not: loggedInUser.id,
           },
-        },
-        room: {
-          users: {
-            some: {
-              id: loggedInUser.id,
+          room: {
+            users: {
+              some: {
+                id: loggedInUser.id,
+              },
             },
           },
         },
@@ -29,6 +29,9 @@ export default {
         };
       }
       await client.message.update({
+        where: {
+          id,
+        },
         data: {
           read: true,
         },

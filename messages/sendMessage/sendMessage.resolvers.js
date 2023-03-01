@@ -11,6 +11,9 @@ export default {
             where: {
               id: userId,
             },
+            select: {
+              id: true,
+            },
           });
           if (!user) {
             return {
@@ -56,7 +59,7 @@ export default {
                 id: room.id,
               },
             },
-            users: {
+            user: {
               connect: {
                 id: loggedInUser.id,
               },
