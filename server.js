@@ -23,6 +23,7 @@ app.use(logger("tiny"));
 app.use("/static", express.static("uploads"));
 app.use(graphqlUploadExpress());
 apollo.applyMiddleware({ app });
+apollo.installSubscriptionHandlers(app);
 app.listen({ port: PORT }, () => {
   console.log(`Server is running on http://localhost:${PORT}/`);
 });
