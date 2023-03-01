@@ -4,6 +4,7 @@ import logger from "morgan";
 import { typeDefs, resolvers } from "./schema";
 import { getUser } from "./users/users.utils";
 import { graphqlUploadExpress } from "graphql-upload";
+import http from "http";
 require("dotenv").config();
 
 const PORT = process.env.PORT;
@@ -12,9 +13,11 @@ const apollo = new ApolloServer({
   resolvers,
   uploads: false,
   context: async ({ req }) => {
-    return {
-      loggedInUser: await getUser(req.headers.token),
-    };
+    if (req) {
+      return {
+        loggedInUser: await getUser(req.headers.token),
+      };
+    }
   },
 });
 
@@ -23,7 +26,10 @@ app.use(logger("tiny"));
 app.use("/static", express.static("uploads"));
 app.use(graphqlUploadExpress());
 apollo.applyMiddleware({ app });
-apollo.installSubscriptionHandlers(app);
-app.listen({ port: PORT }, () => {
+
+const httpServer = http.createServer(app);
+apollo.installSubscriptionHandlers(httpServer);
+
+httpServer.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}/`);
 });
